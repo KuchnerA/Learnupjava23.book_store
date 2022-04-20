@@ -26,7 +26,7 @@ public class BooksOrder {
     @JoinColumn
     private Client client;
 
-    @OneToMany(mappedBy = "books_order", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "booksOrder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<OrderDetails> orderDetails;
 
