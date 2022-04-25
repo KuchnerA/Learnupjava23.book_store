@@ -9,21 +9,21 @@ import java.util.List;
 @Service
 public class ClientService {
 
-    private final ClientRepository repository;
+    private final ClientRepository clientRepository;
 
-    public ClientService(ClientRepository repository) {
-        this.repository = repository;
+    public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
     }
 
     public Client createClient(Client client) {
-        return repository.save(client);
+        return clientRepository.save(client);
     }
 
     public List<Client> getClients() {
-        return repository.findAll();
+        return clientRepository.findAll();
     }
 
     public Client getClientById(Long id) {
-        return repository.getById(id);
+        return clientRepository.getById(id);
     }
 }

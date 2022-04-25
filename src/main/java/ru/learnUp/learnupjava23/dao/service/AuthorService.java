@@ -9,22 +9,22 @@ import java.util.List;
 @Service
 public class AuthorService {
 
-    private final AuthorRepository repository;
+    private final AuthorRepository authorRepository;
 
-    public AuthorService(AuthorRepository repository) {
-        this.repository = repository;
+    public AuthorService(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
     }
 
     public Author createAuthor(Author author) {
-        return repository.save(author);
+        return authorRepository.save(author);
     }
 
     public List<Author> getAuthors() {
-        return repository.findAll();
+        return authorRepository.findAll();
     }
 
     public Author getAuthorById(Long id) {
-        return repository.getById(id);
+        return authorRepository.getById(id);
     }
 
 }

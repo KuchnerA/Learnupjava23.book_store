@@ -9,21 +9,21 @@ import java.util.List;
 @Service
 public class BookstoreService {
 
-    private final BookstoreRepository repository;
+    private final BookstoreRepository bookstoreRepository;
 
-    public BookstoreService(BookstoreRepository repository) {
-        this.repository = repository;
+    public BookstoreService(BookstoreRepository bookstoreRepository) {
+        this.bookstoreRepository = bookstoreRepository;
     }
 
     public Bookstore createBookstore(Bookstore bookstore) {
-        return repository.save(bookstore);
+        return bookstoreRepository.save(bookstore);
     }
 
     public List<Bookstore> getBookstores() {
-        return repository.findAll();
+        return bookstoreRepository.findAll();
     }
 
     public Bookstore getBookstoreById(Long id) {
-        return repository.getById(id);
+        return bookstoreRepository.getById(id);
     }
 }
