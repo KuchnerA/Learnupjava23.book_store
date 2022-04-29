@@ -1,45 +1,49 @@
 package ru.learnUp.learnupjava23;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
-import ru.learnUp.learnupjava23.dao.repository.BookRepository;
-import ru.learnUp.learnupjava23.dao.service.*;
+import ru.learnUp.learnupjava23.dao.entity.Book;
+import ru.learnUp.learnupjava23.dao.service.BookService;
+import ru.learnUp.learnupjava23.dao.service.BookstoreService;
+import ru.learnUp.learnupjava23.exceptions.NotEnoughBooksException;
 
+@Slf4j
 @SpringBootApplication
 @EnableCaching
 public class Learnupjava23Application {
 
-    private static final Logger log = LoggerFactory.getLogger(Learnupjava23Application.class);
+    public static void main(String[] args) throws InterruptedException {
 
-    public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Learnupjava23Application.class, args);
 
-        AuthorService author = context.getBean(AuthorService.class);
-
         BookService bookService = context.getBean(BookService.class);
+        BookstoreService bookstoreService = context.getBean(BookstoreService.class);
 
-        BookstoreService bookStorageService = context.getBean(BookstoreService.class);
+        // - method to get all books by one author using JPQL
 
-        ClientService clientService = context.getBean(ClientService.class);
+//        BookRepository bookRepository = context.getBean(BookRepository.class);
+//        log.info("Search result: {}", bookRepository.findByAuthor("Dostoevsky Fedor Mikhailovich"));
 
-        BooksOrderService booksOrderService = context.getBean(BooksOrderService.class);
 
-//        log.info("authors: {}", author.getAuthors());
-//        log.info("books: {}", bookService.getBooks());
-//        log.info("book storages: {}", bookStorageService.getBookstores());
-//        log.info("clients: {}", clientService.getClients());
-//        log.info("book orders: {}", booksOrderService.getBooksOrders());
+        // - method parallel purchase of books by multiple users
 
-        BookRepository bookRepository = context.getBean(BookRepository.class);
-        log.info("Search result: {}", bookRepository.findByAuthor("Dostoevsky Fedor Mikhailovich"));
+        updateAsync(bookstoreService, bookService.getBookById(1L));
+    }
 
-        for (int i = 0; i < 5; i++) {
-            log.info("Book id = 1: {}", bookService.getBookById(1L));
+    static void updateAsync(BookstoreService service, Book book) {
+
+        for (int i = 0; i < 2; i++) {
+            new Thread(() -> {
+                try {
+                    service.buyBook(book, 1);
+                    log.info("Book purchase completed!");
+                } catch (NotEnoughBooksException e) {
+                    log.warn("Sorry, there are no such number of books... try again later");
+                }
+            }).start();
         }
-
     }
 }
