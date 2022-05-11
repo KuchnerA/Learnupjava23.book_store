@@ -1,7 +1,6 @@
 package ru.learnUp.learnupjava23.dao.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.learnUp.learnupjava23.dao.entity.Book;
@@ -9,7 +8,6 @@ import ru.learnUp.learnupjava23.dao.entity.Bookstore;
 import ru.learnUp.learnupjava23.dao.repository.BookstoreRepository;
 import ru.learnUp.learnupjava23.exceptions.NotEnoughBooksException;
 
-import javax.persistence.LockModeType;
 import java.util.List;
 
 @Slf4j
@@ -39,7 +37,6 @@ public class BookstoreService {
     }
 
     @Transactional
-    @Lock(value = LockModeType.READ)
     public Bookstore update(Bookstore bookstore) {
         if (bookstore.getAmountOfBooks() >= 0) {
         bookstoreRepository.save(bookstore);
@@ -50,7 +47,6 @@ public class BookstoreService {
     }
 
     @Transactional
-    @Lock(value = LockModeType.READ)
     public int buyBook(Book book, int amountOfBooks) {
         Bookstore bookstore = getStorageByBook(book);
         bookstore.setAmountOfBooks(bookstore.getAmountOfBooks() - amountOfBooks);

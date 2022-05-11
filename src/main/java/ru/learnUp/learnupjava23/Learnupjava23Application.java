@@ -20,7 +20,7 @@ public class Learnupjava23Application {
         ConfigurableApplicationContext context = SpringApplication.run(Learnupjava23Application.class, args);
 
         BookService bookService = context.getBean(BookService.class);
-        BookstoreService bookstoreService = context.getBean(BookstoreService.class);
+//        BookstoreService bookstoreService = context.getBean(BookstoreService.class);
 
         // - method to get all books by one author using JPQL
 
@@ -30,7 +30,7 @@ public class Learnupjava23Application {
 
         // - method parallel purchase of books by multiple users
 
-        updateAsync(bookstoreService, bookService.getBookById(1L));
+//        updateAsync(bookstoreService, bookService.getBookById(1L));
     }
 
     static void updateAsync(BookstoreService service, Book book) {

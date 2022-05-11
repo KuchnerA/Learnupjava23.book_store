@@ -14,6 +14,9 @@ import java.util.List;
 @Setter
 @ToString(exclude = {"author"})
 @RequiredArgsConstructor
+@Builder
+//@NoArgsConstructor
+@AllArgsConstructor
 public class Book implements Serializable {
 
     @Id
