@@ -1,6 +1,7 @@
 package ru.learnUp.learnupjava23.dao.service;
 
 import org.springframework.stereotype.Service;
+import ru.learnUp.learnupjava23.dao.entity.Book;
 import ru.learnUp.learnupjava23.dao.entity.BooksOrder;
 import ru.learnUp.learnupjava23.dao.repository.BooksOrderRepository;
 
@@ -25,5 +26,10 @@ public class BooksOrderService {
 
     public BooksOrder getBooksOrderById(Long id) {
         return booksOrderRepository.getById(id);
+    }
+
+    public BooksOrder addBookToOrder(Book book, int count) {
+        BooksOrder order = new BooksOrder();
+        return booksOrderRepository.save(order);
     }
 }

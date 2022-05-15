@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Author implements Serializable {
 
     @Id
@@ -27,4 +28,8 @@ public class Author implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Book> books;
 
+    public Author(Long id, String fullName) {
+        this.id = id;
+        this.fullName = fullName;
+    }
 }

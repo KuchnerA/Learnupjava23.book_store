@@ -19,7 +19,7 @@ public class Learnupjava23Application {
 
         ConfigurableApplicationContext context = SpringApplication.run(Learnupjava23Application.class, args);
 
-        BookService bookService = context.getBean(BookService.class);
+//        BookService bookService = context.getBean(BookService.class);
 //        BookstoreService bookstoreService = context.getBean(BookstoreService.class);
 
         // - method to get all books by one author using JPQL

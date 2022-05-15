@@ -20,7 +20,7 @@ public class OrderDetails {
     @JoinColumn
     private BooksOrder booksOrder;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn
     private Book book;
 

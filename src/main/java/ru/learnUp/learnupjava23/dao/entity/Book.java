@@ -15,7 +15,6 @@ import java.util.List;
 @ToString(exclude = {"author"})
 @RequiredArgsConstructor
 @Builder
-//@NoArgsConstructor
 @AllArgsConstructor
 public class Book implements Serializable {
 
@@ -40,6 +39,5 @@ public class Book implements Serializable {
     private Author author;
 
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<OrderDetails> orderDetails;
+    private List<Bookstore> bookstores;
 }
