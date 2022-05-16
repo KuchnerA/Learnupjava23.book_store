@@ -14,8 +14,8 @@ public class BookstoreSpecification {
 
             Predicate predicate = cb.isNotNull(root.get("id"));
 
-            if (filter.getBook() != null) {
-                predicate = cb.and(predicate, cb.like(root.get("title"), "%" + filter.getBook() + "%"));
+            if (filter.getBookTitle() != null) {
+                predicate = cb.and(predicate, cb.like(root.get("book").get("title"), "%" + filter.getBookTitle() + "%"));
             }
             return predicate;
         };

@@ -1,6 +1,8 @@
 package ru.learnUp.learnupjava23.view;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.learnUp.learnupjava23.dao.entity.Client;
 
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Data
 @Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientView {
 
     private Long id;

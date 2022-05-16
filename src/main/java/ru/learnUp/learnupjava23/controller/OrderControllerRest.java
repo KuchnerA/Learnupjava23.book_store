@@ -1,11 +1,11 @@
 package ru.learnUp.learnupjava23.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.learnUp.learnupjava23.dao.entity.Client;
-import ru.learnUp.learnupjava23.dao.filters.ClientFilter;
+import ru.learnUp.learnupjava23.dao.entity.BooksOrder;
+import ru.learnUp.learnupjava23.dao.filters.OrderFilter;
 import ru.learnUp.learnupjava23.dao.service.BooksOrderService;
+import ru.learnUp.learnupjava23.dao.service.ClientService;
 import ru.learnUp.learnupjava23.view.BooksOrderView;
-import ru.learnUp.learnupjava23.view.ClientView;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -18,71 +18,63 @@ public class OrderControllerRest {
 
     private final BooksOrderService orderService;
     private final BooksOrderView mapper;
+    private final ClientService clientService;
 
-    public OrderControllerRest(BooksOrderService orderService, BooksOrderView mapper) {
+    public OrderControllerRest(BooksOrderService orderService, BooksOrderView mapper, ClientService clientService) {
         this.orderService = orderService;
         this.mapper = mapper;
+        this.clientService = clientService;
     }
 
-    // get clients
-//    @GetMapping
-//    public List<ClientView> getClients(
-//            @RequestParam(value = "fullName", required = false) String fullName
-//    ) {
-//        return mapper.mapToViewList(clientService.getClientBy(new ClientFilter(fullName)));
-//    }
+    @GetMapping
+    public List<BooksOrderView> getOrders(
+            @RequestParam(value = "clientName", required = false) String clientName
+    ) {
+        return mapper.mapToViewList(orderService.getOrdersBy(new OrderFilter(clientName)));
+    }
 
     @GetMapping("/{orderId}")
     public BooksOrderView getOrder(@PathVariable("orderId") Long orderId) {
         return mapper.mapToView(orderService.getBooksOrderById(orderId));
     }
 
-//    // add client
-//    @PostMapping
-//    public ClientView createBook(@RequestBody ClientView body) {
-//        if (body.getId() != null) {
-//            throw new EntityExistsException(
-//                    String.format("Post with id = %s already exist", body.getId())
-//            );
-//        }
-//        Client client = mapper.mapFromView(body);
-//        Client createdClient = clientService.createClient(client);
-//        return mapper.mapToView(createdClient);
-//    }
-//
-//    // update client
-//    @PutMapping("/{clientId}")
-//    public ClientView updateClient(
-//            @PathVariable("clientId") Long clientId,
-//            @RequestBody ClientView body
-//    ) {
-//        if (body.getId() == null) {
-//            throw new EntityNotFoundException("Try to found null entity");
-//        }
-//        if (!Objects.equals(clientId, body.getId())) {
-//            throw new RuntimeException("Entity has bad id");
-//        }
-//
-//        Client client = clientService.getClientById(clientId);
-//
-//        if (!client.getFullName().equals(body.getFullName())) {
-//            client.setFullName(body.getFullName());
-//        }
-//
-//        if (!client.getBirthDate().equals(body.getBirthDate())) {
-//            client.setBirthDate(body.getBirthDate());
-//        }
-//
-//        Client updated = clientService.update(client);
-//
-//        return mapper.mapToView(updated);
-//    }
-//
-//    // delete client
-//    @DeleteMapping("/{clientId}")
-//    public Boolean deleteBook(@PathVariable("clientId") Long id) {
-//        return clientService.delete(id);
-//    }
+    @PostMapping
+    public BooksOrderView createOrder(@RequestBody BooksOrderView body) {
+        if (body.getId() != null) {
+            throw new EntityExistsException("Id must be null");
+        }
+        BooksOrder order = mapper.mapFromView(body, clientService);
+        BooksOrder createdOrder = orderService.createBooksOrder(order);
+        return mapper.mapToView(createdOrder);
+    }
+
+    @PutMapping("/{orderId}")
+    public BooksOrderView updateOrder(
+            @PathVariable("orderId") Long orderId,
+            @RequestBody BooksOrderView body
+    ) {
+        if (body.getId() == null) {
+            throw new EntityNotFoundException("Try to found null entity");
+        }
+        if (!Objects.equals(orderId, body.getId())) {
+            throw new RuntimeException("Entity has bad id");
+        }
+
+        BooksOrder order = orderService.getBooksOrderById(orderId);
+
+        if (order.getPurchaseAmount() != body.getPurchaseAmount()) {
+            order.setPurchaseAmount(body.getPurchaseAmount());
+        }
+
+        BooksOrder updated = orderService.update(order);
+
+        return mapper.mapToView(updated);
+    }
+
+    @DeleteMapping("/{orderId}")
+    public Boolean deleteOrder(@PathVariable("orderId") Long id) {
+        return orderService.delete(id);
+    }
 }
 
 

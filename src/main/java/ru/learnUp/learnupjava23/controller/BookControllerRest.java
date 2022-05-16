@@ -25,9 +25,11 @@ public class BookControllerRest {
 
     @GetMapping
     public List<BookView> getBooks(
-            @RequestParam(value = "title", required = false) String title
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "yearOfPublication", required = false) String yearOfPublication,
+            @RequestParam(value = "price", required = false) String price
     ) {
-        return mapper.mapToViewList(bookService.getBooksBy(new BookFilter(title)));
+        return mapper.mapToViewList(bookService.getBooksBy(new BookFilter(title, yearOfPublication,price)));
     }
 
     @GetMapping("/{bookId}")

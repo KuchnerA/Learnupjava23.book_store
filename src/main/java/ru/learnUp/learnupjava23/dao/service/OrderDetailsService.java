@@ -23,7 +23,12 @@ public class OrderDetailsService {
         return orderDetailsRepository.findAll();
     }
 
-    public OrderDetails getOrderDetailsById(Long id) {
+    public OrderDetails getOrderDetailById(Long id) {
         return orderDetailsRepository.getById(id);
+    }
+
+    public Boolean delete(Long id) {
+        orderDetailsRepository.delete(orderDetailsRepository.getById(id));
+        return true;
     }
 }

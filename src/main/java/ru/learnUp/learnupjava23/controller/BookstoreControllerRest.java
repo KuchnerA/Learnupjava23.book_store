@@ -2,12 +2,14 @@ package ru.learnUp.learnupjava23.controller;
 
 import org.springframework.web.bind.annotation.*;
 import ru.learnUp.learnupjava23.dao.entity.Bookstore;
+import ru.learnUp.learnupjava23.dao.filters.BookstoreFilter;
 import ru.learnUp.learnupjava23.dao.service.BookService;
 import ru.learnUp.learnupjava23.dao.service.BookstoreService;
 import ru.learnUp.learnupjava23.view.BookstoreView;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -25,12 +27,12 @@ public class BookstoreControllerRest {
         this.bookService = bookService;
     }
 
-//    @GetMapping
-//    public List<Bookstore> getBookstore(
-//            @RequestParam(value = "book", required = false) String book
-//    ) {
-//        return bookstoreService.getBookstore(new BookstoreFilter(book));
-//    }
+    @GetMapping
+    public List<BookstoreView> getBookstore(
+            @RequestParam(value = "bookTitle", required = false) String bookTitle
+    ) {
+        return mapper.mapToViewList(bookstoreService.getBookstoreBy(new BookstoreFilter(bookTitle)));
+    }
 
     @GetMapping("/{bookstoreId}")
     public BookstoreView getBookstoreById(@PathVariable("bookstoreId") Long bookstoreId) {

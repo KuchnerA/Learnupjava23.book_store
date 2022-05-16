@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class BookstoreFilter {
 
-    private final String book;
+    private final String bookTitle;
 }

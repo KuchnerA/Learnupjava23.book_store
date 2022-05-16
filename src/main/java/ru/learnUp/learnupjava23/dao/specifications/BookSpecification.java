@@ -17,6 +17,13 @@ public class BookSpecification{
             if (filter.getTitle() != null) {
                 predicate = cb.and(predicate, cb.like(root.get("title"), "%" + filter.getTitle() + "%"));
             }
+            if (filter.getYearOfPublication() != null) {
+                predicate = cb.and(predicate, cb.equal(root.get("yearOfPublication"), filter.getYearOfPublication()));
+            }
+            if (filter.getPrice() != null) {
+                predicate = cb.and(predicate, cb.equal(root.get("price"), filter.getPrice()));
+            }
+
             return predicate;
         };
     }
