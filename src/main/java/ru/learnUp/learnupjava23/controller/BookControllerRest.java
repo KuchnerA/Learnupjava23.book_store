@@ -1,5 +1,6 @@
 package ru.learnUp.learnupjava23.controller;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.learnUp.learnupjava23.dao.entity.Book;
 import ru.learnUp.learnupjava23.dao.filters.BookFilter;
@@ -37,6 +38,7 @@ public class BookControllerRest {
         return mapper.mapToView(bookService.getBookById(bookId));
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping
     public BookView createBook(@RequestBody BookView body) {
         if (body.getId() != null) {
@@ -47,6 +49,7 @@ public class BookControllerRest {
         return mapper.mapToView(createdBook);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/{bookId}")
     public BookView updateBook(
             @PathVariable("bookId") Long bookId,
@@ -75,6 +78,7 @@ public class BookControllerRest {
 
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{bookId}")
     public Boolean deleteBook(@PathVariable("bookId") Long id) {
         return bookService.delete(id);

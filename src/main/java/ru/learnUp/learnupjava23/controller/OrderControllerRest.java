@@ -1,5 +1,6 @@
 package ru.learnUp.learnupjava23.controller;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.learnUp.learnupjava23.dao.entity.BooksOrder;
 import ru.learnUp.learnupjava23.dao.filters.OrderFilter;
@@ -48,6 +49,7 @@ public class OrderControllerRest {
         return mapper.mapToView(createdOrder);
     }
 
+    @Secured({"ROLE_USER"})
     @PutMapping("/{orderId}")
     public BooksOrderView updateOrder(
             @PathVariable("orderId") Long orderId,

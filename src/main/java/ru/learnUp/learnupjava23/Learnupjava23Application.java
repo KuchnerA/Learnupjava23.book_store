@@ -6,18 +6,38 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 import ru.learnUp.learnupjava23.dao.entity.Book;
+import ru.learnUp.learnupjava23.dao.entity.Role;
+import ru.learnUp.learnupjava23.dao.entity.User;
+import ru.learnUp.learnupjava23.dao.repository.RoleRepository;
 import ru.learnUp.learnupjava23.dao.service.BookService;
 import ru.learnUp.learnupjava23.dao.service.BookstoreService;
+import ru.learnUp.learnupjava23.dao.service.UserService;
 import ru.learnUp.learnupjava23.exceptions.NotEnoughBooksException;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Slf4j
-@SpringBootApplication
+@SpringBootApplication()
 @EnableCaching
 public class Learnupjava23Application {
 
     public static void main(String[] args) throws InterruptedException {
 
         ConfigurableApplicationContext context = SpringApplication.run(Learnupjava23Application.class, args);
+
+//        User user = new User();
+//		UserService userService = context.getBean(UserService.class);
+//		RoleRepository roleRepository = context.getBean(RoleRepository.class);
+//
+//		user.setUsername("kind");
+//		user.setPassword("123123");
+//		Set<Role> roles = roleRepository.findAll().stream()
+//				.map(role -> roleRepository.findByName(role.getRole()))
+//				.collect(Collectors.toSet());
+//		user.setRoles(roles);
+//		userService.create(user);
+
 
 //        BookService bookService = context.getBean(BookService.class);
 //        BookstoreService bookstoreService = context.getBean(BookstoreService.class);

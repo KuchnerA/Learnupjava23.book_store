@@ -1,5 +1,6 @@
 package ru.learnUp.learnupjava23.controller;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.learnUp.learnupjava23.dao.entity.Author;
 import ru.learnUp.learnupjava23.dao.filters.AuthorFilter;
@@ -35,6 +36,7 @@ public class AuthorControllerRest {
         return mapper.mapToView(authorService.getAuthorById(authorId));
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping
     public AuthorView createAuthor(@RequestBody AuthorView body) {
         if (body.getId() != null) {
@@ -47,6 +49,7 @@ public class AuthorControllerRest {
         return mapper.mapToView(createdAuthor);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/{authorId}")
     public AuthorView updateAuthor(
             @PathVariable("authorId") Long authorId,
@@ -71,6 +74,7 @@ public class AuthorControllerRest {
 
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{authorId}")
     public Boolean deleteAuthor(@PathVariable("authorId") Long id) {
         return authorService.deleteAuthor(id);
