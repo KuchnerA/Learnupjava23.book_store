@@ -41,12 +41,12 @@ public class BookstoreControllerRest {
 
     @PostMapping
     public BookstoreView createBookstore(@RequestBody BookstoreView body) {
-        if (body.getId() != null) {
-            throw new EntityExistsException(
-                    String.format("Bookstore with id = %s already exist", body.getId())
-            );
-        }
-        Bookstore store = mapper.mapFromView(body, bookService);
+//        if (body.getId() != null) {
+//            throw new EntityExistsException(
+//                    String.format("Bookstore with id = %s already exist", body.getId())
+//            );
+//        }
+        Bookstore store = mapper.mapFromView(body, bookService, bookstoreService);
         Bookstore createdBookstore = bookstoreService.createBookstore(store);
         return mapper.mapToView(createdBookstore);
     }
@@ -56,12 +56,12 @@ public class BookstoreControllerRest {
             @PathVariable("bookstoreId") Long bookstoreId,
             @RequestBody BookstoreView body
     ) {
-        if (body.getId() == null) {
-            throw new EntityNotFoundException("Try to found null entity");
-        }
-        if (!Objects.equals(bookstoreId, body.getId())) {
-            throw new RuntimeException("Entity has bad id");
-        }
+//        if (body.getId() == null) {
+//            throw new EntityNotFoundException("Try to found null entity");
+//        }
+//        if (!Objects.equals(bookstoreId, body.getId())) {
+//            throw new RuntimeException("Entity has bad id");
+//        }
 
         Bookstore store = bookstoreService.getBookstoreById(bookstoreId);
 

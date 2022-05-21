@@ -1,13 +1,18 @@
 package ru.learnUp.learnupjava23.controller;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.learnUp.learnupjava23.dao.entity.Client;
+import ru.learnUp.learnupjava23.dao.entity.User;
 import ru.learnUp.learnupjava23.dao.filters.ClientFilter;
 import ru.learnUp.learnupjava23.dao.service.ClientService;
+import ru.learnUp.learnupjava23.dao.service.UserService;
 import ru.learnUp.learnupjava23.view.ClientView;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,47 +22,48 @@ public class ClientControllerRest {
 
     private final ClientService clientService;
     private final ClientView mapper;
+    private final UserService userService;
 
-    public ClientControllerRest(ClientService clientService, ClientView mapper) {
+    public ClientControllerRest(ClientService clientService, ClientView mapper, UserService userService) {
         this.clientService = clientService;
         this.mapper = mapper;
+        this.userService = userService;
     }
 
-    @GetMapping
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping("/admin")
     public List<ClientView> getClients(
             @RequestParam(value = "fullName", required = false) String fullName
     ) {
         return mapper.mapToViewList(clientService.getClientBy(new ClientFilter(fullName)));
     }
 
-    @GetMapping("/{clientId}")
-    public ClientView getBook(@PathVariable("clientId") Long clientId) {
-        return mapper.mapToView(clientService.getClientById(clientId));
+    @Secured({"ROLE_USER"})
+    @PreAuthorize("#user.name == authentication.principal.username")
+    @GetMapping
+    public ClientView getClient(Principal user) {
+        User authUser = userService.loadUserByUsername(user.getName());
+        return mapper.mapToView(clientService.getClientById(authUser.getClient().getId()));
     }
 
-    @PostMapping
-    public ClientView createBook(@RequestBody ClientView body) {
-        if (body.getId() != null) {
-            throw new EntityExistsException("Client's id must be null");
-        }
-        Client client = mapper.mapFromView(body);
-        Client createdClient = clientService.createClient(client);
-        return mapper.mapToView(createdClient);
-    }
+//    @PostMapping
+//    public ClientView createClient(@RequestBody ClientView body) {
+//        Client client = mapper.mapFromView(body);
+//        Client createdClient = clientService.createClient(client);
+//        return mapper.mapToView(createdClient);
+//    }
 
-    @PutMapping("/{clientId}")
+    @Secured({"ROLE_USER"})
+    @PreAuthorize("#user.name == authentication.principal.username")
+    @PutMapping("/update")
     public ClientView updateClient(
-            @PathVariable("clientId") Long clientId,
+            Principal user,
             @RequestBody ClientView body
     ) {
-        if (body.getId() == null) {
-            throw new EntityNotFoundException("Try to found null entity");
-        }
-        if (!Objects.equals(clientId, body.getId())) {
-            throw new RuntimeException("Entity has bad id");
-        }
 
-        Client client = clientService.getClientById(clientId);
+        User authUser = userService.loadUserByUsername(user.getName());
+
+        Client client = authUser.getClient();
 
         if (!client.getFullName().equals(body.getFullName())) {
             client.setFullName(body.getFullName());
@@ -72,6 +78,7 @@ public class ClientControllerRest {
         return mapper.mapToView(updated);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{clientId}")
     public Boolean deleteBook(@PathVariable("clientId") Long id) {
         return clientService.delete(id);

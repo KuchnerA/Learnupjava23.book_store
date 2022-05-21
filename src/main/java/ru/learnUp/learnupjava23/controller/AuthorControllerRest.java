@@ -39,11 +39,11 @@ public class AuthorControllerRest {
     @Secured({"ROLE_ADMIN"})
     @PostMapping
     public AuthorView createAuthor(@RequestBody AuthorView body) {
-        if (body.getId() != null) {
-            throw new EntityExistsException(
-                    String.format("Author with id = %s already exist", body.getId())
-            );
-        }
+//        if (body.getId() != null) {
+//            throw new EntityExistsException(
+//                    String.format("Author with id = %s already exist", body.getId())
+//            );
+//        }
         Author author = mapper.mapFromView(body);
         Author createdAuthor = authorService.createAuthor(author);
         return mapper.mapToView(createdAuthor);
@@ -55,12 +55,12 @@ public class AuthorControllerRest {
             @PathVariable("authorId") Long authorId,
             @RequestBody AuthorView body
     ) {
-        if (body.getId() == null) {
-            throw new EntityNotFoundException("Try to found null entity");
-        }
-        if (!Objects.equals(authorId, body.getId())) {
-            throw new RuntimeException("Entity has bad id");
-        }
+//        if (body.getId() == null) {
+//            throw new EntityNotFoundException("Try to found null entity");
+//        }
+//        if (!Objects.equals(authorId, body.getId())) {
+//            throw new RuntimeException("Entity has bad id");
+//        }
 
         Author author = authorService.getAuthorById(authorId);
 

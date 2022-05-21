@@ -7,10 +7,7 @@ import ru.learnUp.learnupjava23.dao.filters.BookFilter;
 import ru.learnUp.learnupjava23.dao.service.BookService;
 import ru.learnUp.learnupjava23.view.BookView;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("rest/bookshop")
@@ -41,10 +38,7 @@ public class BookControllerRest {
     @Secured({"ROLE_ADMIN"})
     @PostMapping
     public BookView createBook(@RequestBody BookView body) {
-        if (body.getId() != null) {
-            throw new EntityExistsException("Book id must be null");
-        }
-        Book book = mapper.mapFromView(body);
+        Book book = mapper.mapFromView(body, bookService);
         Book createdBook = bookService.createBook(book);
         return mapper.mapToView(createdBook);
     }
@@ -55,12 +49,6 @@ public class BookControllerRest {
             @PathVariable("bookId") Long bookId,
             @RequestBody BookView body
     ) {
-        if (body.getId() == null) {
-            throw new EntityNotFoundException("Try to found null entity");
-        }
-        if (!Objects.equals(bookId, body.getId())) {
-            throw new RuntimeException("Entity has bad id");
-        }
 
         Book book = bookService.getBookById(bookId);
 

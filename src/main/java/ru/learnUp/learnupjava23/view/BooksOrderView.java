@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.learnUp.learnupjava23.dao.entity.BooksOrder;
-import ru.learnUp.learnupjava23.dao.entity.Client;
 import ru.learnUp.learnupjava23.dao.entity.OrderDetails;
 import ru.learnUp.learnupjava23.dao.service.ClientService;
 
@@ -28,8 +27,7 @@ public class BooksOrderView {
         BooksOrderView view = new BooksOrderView();
         int cost = 0;
         view.setId(booksOrder.getId());
-        view.setClient(new ClientView(booksOrder.getClient().getId(),
-                booksOrder.getClient().getFullName(),
+        view.setClient(new ClientView(booksOrder.getClient().getFullName(),
                 booksOrder.getClient().getBirthDate()));
         view.setPurchaseAmount(booksOrder.getPurchaseAmount());
         if (booksOrder.getOrderDetails() != null) {
@@ -49,8 +47,7 @@ public class BooksOrderView {
             int cost = 0;
             BooksOrderView view = new BooksOrderView();
             view.setId(booksOrder.getId());
-            view.setClient(new ClientView(booksOrder.getClient().getId(),
-                    booksOrder.getClient().getFullName(),
+            view.setClient(new ClientView(booksOrder.getClient().getFullName(),
                     booksOrder.getClient().getBirthDate()));
             if (booksOrder.getOrderDetails() != null) {
                 for (OrderDetails orderDetails : booksOrder.getOrderDetails()) {
@@ -68,7 +65,7 @@ public class BooksOrderView {
     public BooksOrder mapFromView(BooksOrderView view, ClientService clientService) {
         BooksOrder booksOrder = new BooksOrder();
         booksOrder.setId(view.getId());
-        booksOrder.setClient(clientService.getClientById(view.getClient().getId()));
+        booksOrder.setClient(clientService.getClientByName(view.getClient().getFullName()));
         booksOrder.setPurchaseAmount(view.getPurchaseAmount());
         return booksOrder;
     }

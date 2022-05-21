@@ -1,8 +1,10 @@
 package ru.learnUp.learnupjava23.dao.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -26,7 +28,11 @@ public class Client {
     @Column
     private Date birthDate;
 
+    @OneToOne
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
+    @Nullable
+    private User user;
+
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<BooksOrder> booksOrders;
 }

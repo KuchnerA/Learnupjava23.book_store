@@ -1,6 +1,7 @@
 package ru.learnUp.learnupjava23.controller;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.learnUp.learnupjava23.dao.entity.BooksOrder;
 import ru.learnUp.learnupjava23.dao.filters.OrderFilter;
@@ -10,6 +11,7 @@ import ru.learnUp.learnupjava23.view.BooksOrderView;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,11 +29,17 @@ public class OrderControllerRest {
         this.clientService = clientService;
     }
 
+//    @GetMapping
+//    public List<BooksOrderView> getOrders(
+//            @RequestParam(value = "clientName", required = false) String clientName
+//    ) {
+//        return mapper.mapToViewList(orderService.getOrdersBy(new OrderFilter(clientName)));
+//    }
+
     @GetMapping
-    public List<BooksOrderView> getOrders(
-            @RequestParam(value = "clientName", required = false) String clientName
-    ) {
-        return mapper.mapToViewList(orderService.getOrdersBy(new OrderFilter(clientName)));
+    @PreAuthorize("#user.name = authentication.principal.username")
+    public List<BooksOrderView> getOrders(Principal user) {
+        return mapper.mapToViewList(orderService.getOrdersBy(new OrderFilter(user.getName())));
     }
 
     @GetMapping("/{orderId}")

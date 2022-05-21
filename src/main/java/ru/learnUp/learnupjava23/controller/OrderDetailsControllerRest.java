@@ -1,6 +1,7 @@
 package ru.learnUp.learnupjava23.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.learnUp.learnupjava23.dao.entity.BooksOrder;
 import ru.learnUp.learnupjava23.dao.entity.OrderDetails;
 import ru.learnUp.learnupjava23.dao.service.BookService;
 import ru.learnUp.learnupjava23.dao.service.BooksOrderService;
@@ -14,11 +15,11 @@ import javax.persistence.EntityExistsException;
 @RequestMapping("rest/order_details")
 public class OrderDetailsControllerRest {
 
-    public final OrderDetailsService detailsService;
-    public final OrderDetailsToView mapper;
-    public final OrderDetailsFromView mapperFrom;
-    public final BookService bookService;
-    public final BooksOrderService orderService;
+    private final OrderDetailsService detailsService;
+    private final OrderDetailsToView mapper;
+    private final OrderDetailsFromView mapperFrom;
+    private final BookService bookService;
+    private final BooksOrderService orderService;
 
     public OrderDetailsControllerRest(OrderDetailsService detailsService, OrderDetailsToView mapper,
                                       OrderDetailsFromView mapperFrom, BookService bookService,
@@ -49,6 +50,11 @@ public class OrderDetailsControllerRest {
         }
         OrderDetails orderDetails = mapperFrom.mapFromView(body, orderService, bookService);
         OrderDetails createdOrderDetails = detailsService.createOrderDetails(orderDetails);
+        BooksOrder bookOrder = orderService.getBooksOrderById(
+                createdOrderDetails.getBooksOrder().getId()
+        );
+        bookOrder.setPurchaseAmount(bookOrder.getPurchaseAmount() + createdOrderDetails.getPriceOfBooks());
+        orderService.update(bookOrder);
         return mapper.mapToView(createdOrderDetails);
     }
 

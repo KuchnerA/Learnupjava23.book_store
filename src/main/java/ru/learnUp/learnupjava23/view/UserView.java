@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.learnUp.learnupjava23.dao.entity.Client;
 import ru.learnUp.learnupjava23.dao.entity.Role;
 import ru.learnUp.learnupjava23.dao.entity.User;
 import ru.learnUp.learnupjava23.dao.repository.RoleRepository;
+import ru.learnUp.learnupjava23.dao.service.ClientService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,14 +51,20 @@ public class UserView {
         return view;
     }
 
-    public User mapFromView(UserView view, RoleRepository roleRepository) {
+    public User mapFromView(UserView view, RoleRepository roleRepository, ClientService clientService) {
         User user = new User();
+        Client client = new Client();
+
+        client.setFullName(view.getLogin());
+        client.setUser(null);
+        clientService.createClient(client);
         Set<Role> roles = view.getRoles().stream()
                 .map(role -> roleRepository.findByName(role.getRole()))
                 .collect(Collectors.toSet());
         user.setUsername(view.getLogin());
         user.setPassword(view.getPassword());
         user.setRoles(roles);
+        user.setClient(clientService.getClientByName(view.getLogin()));
         return user;
     }
 

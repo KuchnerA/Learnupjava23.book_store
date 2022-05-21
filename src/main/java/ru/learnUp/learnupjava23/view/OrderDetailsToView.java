@@ -21,8 +21,7 @@ public class OrderDetailsToView {
         OrderDetailsToView view = new OrderDetailsToView();
         view.setBook(new BookViewForDetails(orderDetails.getBook().getTitle()));
         view.setCountOfBooks(orderDetails.getCountOfBooks());
-        view.setPriceOfBooks(orderDetails.getCountOfBooks() *
-                orderDetails.getBook().getPrice());
+        view.setPriceOfBooks(orderDetails.getPriceOfBooks());
         return view;
     }
 
@@ -32,8 +31,7 @@ public class OrderDetailsToView {
             OrderDetailsToView view = new OrderDetailsToView();
             view.setBook(new BookViewForDetails(orderDetails.getBook().getTitle()));
             view.setCountOfBooks(orderDetails.getCountOfBooks());
-            view.setPriceOfBooks(orderDetails.getCountOfBooks() *
-                    orderDetails.getBook().getPrice());
+            view.setPriceOfBooks(orderDetails.getPriceOfBooks());
         });
         return views;
     }

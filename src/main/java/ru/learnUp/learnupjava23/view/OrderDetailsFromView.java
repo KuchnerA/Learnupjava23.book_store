@@ -18,8 +18,6 @@ public class OrderDetailsFromView {
 
     private int countOfBooks;
 
-    private int priceOfBooks;
-
     public OrderDetails mapFromView(OrderDetailsFromView view, BooksOrderService orderService,
                                     BookService bookservice) {
         OrderDetails orderDetails = new OrderDetails();
