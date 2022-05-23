@@ -10,11 +10,8 @@ import ru.learnUp.learnupjava23.dao.service.ClientService;
 import ru.learnUp.learnupjava23.dao.service.UserService;
 import ru.learnUp.learnupjava23.view.ClientView;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("rest/client")
@@ -69,7 +66,12 @@ public class ClientControllerRest {
             client.setFullName(body.getFullName());
         }
 
-        if (!client.getBirthDate().equals(body.getBirthDate())) {
+        if (!(client.getBirthDate() == null)) {
+            if (!client.getBirthDate().equals(body.getBirthDate()))
+            {client.setBirthDate(body.getBirthDate());}
+        }
+
+        if (client.getBirthDate() == null) {
             client.setBirthDate(body.getBirthDate());
         }
 

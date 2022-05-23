@@ -13,7 +13,6 @@ import java.util.Calendar;
 @RequestMapping("/purchase")
 public class PurchaseControllerRest {
 
-    private final ClientService clientService;
     private final BooksOrderService orderService;
     private final OrderDetailsService detailsService;
     private final BookService bookService;
@@ -21,11 +20,9 @@ public class PurchaseControllerRest {
     private final UserService userService;
     private final OrderHistoryService historyService;
 
-    public PurchaseControllerRest(ClientService clientService,
-                                  BooksOrderService orderService,
+    public PurchaseControllerRest(BooksOrderService orderService,
                                   OrderDetailsService detailsService,
                                   BookService bookService, BookstoreService storageService, UserService userService, OrderHistoryService historyService) {
-        this.clientService = clientService;
         this.orderService = orderService;
         this.detailsService = detailsService;
         this.bookService = bookService;
@@ -51,7 +48,7 @@ public class PurchaseControllerRest {
             }
         }
 
-        StringBuilder result = new StringBuilder("");
+        StringBuilder result = new StringBuilder();
         BooksOrder order = new BooksOrder();
         OrderHistory orderHistory = new OrderHistory();
         User user = userService.loadUserByUsername(SecurityContextHolder
@@ -80,6 +77,6 @@ public class PurchaseControllerRest {
         orderHistory.setCal(Calendar.getInstance());
         historyService.create(orderHistory);
 
-        return result.toString() + "Thank you!";
+        return result + "Thank you!";
     }
 }

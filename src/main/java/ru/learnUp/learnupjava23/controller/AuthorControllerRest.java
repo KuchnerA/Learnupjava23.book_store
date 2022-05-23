@@ -7,10 +7,7 @@ import ru.learnUp.learnupjava23.dao.filters.AuthorFilter;
 import ru.learnUp.learnupjava23.dao.service.AuthorService;
 import ru.learnUp.learnupjava23.view.AuthorView;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("rest/authors")
@@ -39,11 +36,6 @@ public class AuthorControllerRest {
     @Secured({"ROLE_ADMIN"})
     @PostMapping
     public AuthorView createAuthor(@RequestBody AuthorView body) {
-//        if (body.getId() != null) {
-//            throw new EntityExistsException(
-//                    String.format("Author with id = %s already exist", body.getId())
-//            );
-//        }
         Author author = mapper.mapFromView(body);
         Author createdAuthor = authorService.createAuthor(author);
         return mapper.mapToView(createdAuthor);
@@ -55,12 +47,6 @@ public class AuthorControllerRest {
             @PathVariable("authorId") Long authorId,
             @RequestBody AuthorView body
     ) {
-//        if (body.getId() == null) {
-//            throw new EntityNotFoundException("Try to found null entity");
-//        }
-//        if (!Objects.equals(authorId, body.getId())) {
-//            throw new RuntimeException("Entity has bad id");
-//        }
 
         Author author = authorService.getAuthorById(authorId);
 
